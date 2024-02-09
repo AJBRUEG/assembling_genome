@@ -1,0 +1,1 @@
+#assembling a draft genome and analyzing strucutral variants with long-read sequencing technologies
