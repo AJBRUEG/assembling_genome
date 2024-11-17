@@ -118,16 +118,17 @@ total.length.plot <- ggplot(read_length_df, aes(x=length, fill=platform, color=p
   scale_y_continuous(labels = scales::comma) +
   labs(x = "Read length (bp)", y = "Count") +
   theme_bw()
-#SOMETHING NOT RIGHT, GRAPH NOT DISPLAYING
+total.length.plot
 
 #graph: read-length distribution plot for reads <=20kb in length
 t20kb.length.plot <- ggplot(read_length_df, aes(x=length, fill=platform, color=platform)) +
   geom_histogram(binwidth=50, alpha=0.5, position="dodge") +
-  geom_vline(data=summary_df, aes(xintercept=grp.mean, color=platform), linetype="dashed", size=0.2) +
   scale_x_continuous(labels = scales::comma, limit = c(0,20000)) +
   scale_y_continuous(labels = scales::comma) +
   labs(x = "Read length (bp)", y = "Count") +
   theme_bw()
+t20kb.length.plot
+#SOMETHING WRONG, THIS PLOT WON'T DISPLAY
 
 #merge both plots
 plot <- plot_grid(total.length.plot,t20kb.length.plot,ncol=1)
@@ -135,5 +136,18 @@ plot <- plot_grid(total.length.plot,t20kb.length.plot,ncol=1)
 pdf("read.length.pdf",width=6,height=8,paper='special')
 print(plot)
 dev.off()
+
+#-----CALCULATE N50 STATISTICS-----
+
+#Unzipped FASTA/Q files are required for assembly-stats
+#You can unzip your fastq.gz files using the command "gzip -d file_name.fastq.gz"
+#For general usage, specify the read or contig file names after "assembly-stats"
+
+#setwd to different directory (so we don't store large data files in a github repo)
+setwd("C:/Users/drewj/OneDrive/R_based_work/assembling_genome_nonrepo")
+
+#calculate summary stats and save the output as an "N50_stat" file
+x <- "wsl gunzip -c SRR11906525_WGS_of_drosophila_melanogaster_female_adult_subreads.fastq.gz | assemply-stats"
+system(x)
 
 #FINISH#
